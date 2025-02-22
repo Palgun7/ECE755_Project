@@ -23,12 +23,6 @@ module top (
     output logic signed [16:0] out0, out1;
     output logic out0_ready, out1_ready;
 
-    //////////////////////////////////////////
-    // Implementation of the neural network//
-    ////////////////////////////////////////
-    
-    //Signed output bits for the middle layer
-    //Middle layer has an extra bit
     logic signed [11:0] y4, y5, y6, y7; 
 
     //Signed output of ReLu activation
@@ -37,7 +31,7 @@ module top (
     //Pipelined ready signals.
     logic y_ready, z_ready; 
 
-    //Input MAC operation -> y(j) = ∑ x(i) × w(i,j)
+    //Input MAC operation 
     always_ff @(posedge clk) 
 	begin
         if(in_ready) begin
@@ -49,7 +43,7 @@ module top (
 		y_ready <= in_ready;
 	end
 	
-    //ReLu Function -> ReLu(x) = max (0, x)
+    //ReLu Function
 	always_ff @(posedge clk) 
 	begin         
         //If negative number then assign as 0 else assign y
@@ -67,7 +61,7 @@ module top (
         out1 <= z4 * w49 + z5 * w59 + z6 * w69 + z7 * w79;    
     end
 
-    //Set reset flip flop for output indicators.    
+    //Set reset flip flop for output    
     always_ff@(posedge clk)
     begin
         if(z_ready) begin
