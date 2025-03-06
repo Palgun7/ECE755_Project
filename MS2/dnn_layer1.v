@@ -27,7 +27,9 @@ module dnn_layer1 #(
         end
     end
 
-    assign out0 = mac_out0;
-    assign out1 = mac_out1;
+    assign out4 = mac_out4;
+    assign out5 = mac_out5;
+    assign out6 = mac_out6;
+    assign out7 = mac_out7;
 
 endmodule
