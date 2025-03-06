@@ -1,17 +1,17 @@
-module relu_4n #(parameter RELU4_SIZE = 21) (
+module relu_4n #(parameter RELU4_SIZE = 17) (
     input  signed [RELU4_SIZE - 1 : 0]    in0_n0, in1_n0, in2_n0, in3_n0,
                                             in0_n1, in1_n1, in2_n1, in3_n1,
                                             in0_n2, in1_n2, in2_n2, in3_n2,
                                             in0_n3, in1_n3, in2_n3, in3_n3,
     input clk, in_ready,
 
-    output reg signed [RELU4_SIZE - 1 : 0]    out0_n0, out1_n0, out2_n0, out3_n0,
+    output signed [RELU4_SIZE - 1 : 0]    out0_n0, out1_n0, out2_n0, out3_n0,
                                             out0_n1, out1_n1, out2_n1, out3_n1,
                                             out0_n2, out1_n2, out2_n2, out3_n2,
                                             out0_n3, out1_n3, out2_n3, out3_n3,
     output relu_ready);
 
-    reg relu_ready_0, relu_ready_1, relu_ready_2, relu_ready_3;
+    wire relu_ready_0, relu_ready_1, relu_ready_2, relu_ready_3;
 
     
     relu    #(.RELU_SIZE(RELU4_SIZE)) 

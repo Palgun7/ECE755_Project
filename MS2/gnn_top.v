@@ -16,7 +16,8 @@ module gnn_top #(
      input signed [4:0] w07, w17, w27, w37,
      input signed [4:0] w48, w58, w68, w78,
      input signed [4:0] w49, w59, w69, w79,
-     input signed clk,
+     input clk,
+     input in_ready,
      output [20:0] out0_node0, out1_node0,
      output [20:0] out0_node1, out1_node1,
      output [20:0] out0_node2, out1_node2,
@@ -50,10 +51,10 @@ wire signed [AGGR_OUT2_SIZE-1:0] y7_n0_aggr, y7_n1_aggr, y7_n2_aggr, y7_n3_aggr;
 wire aggr_ready_2;
 
 // Wires for RELU outputs
-wire signed [OUTPUT_SIZE-1:0] y4_n0_relu, y4_n1_relu, y4_n2_relu, y4_n3_relu;
-wire signed [OUTPUT_SIZE-1:0] y5_n0_relu, y5_n1_relu, y5_n2_relu, y5_n3_relu;
-wire signed [OUTPUT_SIZE-1:0] y6_n0_relu, y6_n1_relu, y6_n2_relu, y6_n3_relu;
-wire signed [OUTPUT_SIZE-1:0] y7_n0_relu, y7_n1_relu, y7_n2_relu, y7_n3_relu;
+wire signed [AGGR_OUT2_SIZE-1:0] y4_n0_relu, y4_n1_relu, y4_n2_relu, y4_n3_relu;
+wire signed [AGGR_OUT2_SIZE-1:0] y5_n0_relu, y5_n1_relu, y5_n2_relu, y5_n3_relu;
+wire signed [AGGR_OUT2_SIZE-1:0] y6_n0_relu, y6_n1_relu, y6_n2_relu, y6_n3_relu;
+wire signed [AGGR_OUT2_SIZE-1:0] y7_n0_relu, y7_n1_relu, y7_n2_relu, y7_n3_relu;
 wire relu_ready;
 
 
