@@ -1,37 +1,38 @@
 module gnn_top #( 
-     AGGR_OUT_SIZE = 7,
-     WEIGHTED_OUT1_SIZE = 17,
-     AGGR_IN_SIZE = 5,
-     OUTPUT_SIZE  = 21
+     parameter AGGR_OUT1_SIZE = 7,
+     parameter AGGR_OUT2_SIZE = 17,
+     parameter WEIGHTED_OUT_SIZE = 15,
+     parameter AGGR_IN_SIZE = 5,
+     parameter OUTPUT_SIZE  = 21
 
 )(
-     input signed [4:0] x0_node0, x1_node0, x2_node0, x3_node0;
-     input signed [4:0] x0_node1, x1_node1, x2_node1, x3_node1;
-     input signed [4:0] x0_node2, x1_node2, x2_node2, x3_node2;
-     input signed [4:0] x0_node3, x1_node3, x2_node3, x3_node3;
-     input signed [4:0] w04, w14, w24, w34;
-     input signed [4:0] w05, w15, w25, w35;
-     input signed [4:0] w06, w16, w26, w36;
-     input signed [4:0] w07, w17, w27, w37;
-     input signed [4:0] w48, w58, w68, w78;
-     input signed [4:0] w49, w59, w69, w79;
-     input signed clk;
-     output [20:0] out0_node0, out1_node0;
-     output [20:0] out0_node1, out1_node1;
-     output [20:0] out0_node2, out1_node2;
-     output [20:0] out0_node3, out1_node3;
-     output out10_ready_node0, out11_ready_node0;
-     output out10_ready_node1, out11_ready_node1;
-     output out10_ready_node2, out11_ready_node2;
-     output out10_ready_node3, out11_ready_node3;
+     input signed [4:0] x0_node0, x1_node0, x2_node0, x3_node0,
+     input signed [4:0] x0_node1, x1_node1, x2_node1, x3_node1,
+     input signed [4:0] x0_node2, x1_node2, x2_node2, x3_node2,
+     input signed [4:0] x0_node3, x1_node3, x2_node3, x3_node3,
+     input signed [4:0] w04, w14, w24, w34,
+     input signed [4:0] w05, w15, w25, w35,
+     input signed [4:0] w06, w16, w26, w36,
+     input signed [4:0] w07, w17, w27, w37,
+     input signed [4:0] w48, w58, w68, w78,
+     input signed [4:0] w49, w59, w69, w79,
+     input signed clk,
+     output [20:0] out0_node0, out1_node0,
+     output [20:0] out0_node1, out1_node1,
+     output [20:0] out0_node2, out1_node2,
+     output [20:0] out0_node3, out1_node3,
+     output out10_ready_node0, out11_ready_node0,
+     output out10_ready_node1, out11_ready_node1,
+     output out10_ready_node2, out11_ready_node2,
+     output out10_ready_node3, out11_ready_node3
 );
 
 // Wires for first aggregation (aggr -> dnn_layer_1)
 wire aggr_ready_1;
-wire signed [AGGR_OUT_SIZE - 1:0] x0_n0_aggr, x0_n1_aggr, x0_n2_aggr, x0_n3_aggr;
-wire signed [AGGR_OUT_SIZE - 1:0] x1_n0_aggr, x1_n1_aggr, x1_n2_aggr, x1_n3_aggr;
-wire signed [AGGR_OUT_SIZE - 1:0] x2_n0_aggr, x2_n1_aggr, x2_n2_aggr, x2_n3_aggr;
-wire signed [AGGR_OUT_SIZE - 1:0] x3_n0_aggr, x3_n1_aggr, x3_n2_aggr, x3_n3_aggr;
+wire signed [AGGR_OUT1_SIZE - 1:0] x0_n0_aggr, x0_n1_aggr, x0_n2_aggr, x0_n3_aggr;
+wire signed [AGGR_OUT1_SIZE - 1:0] x1_n0_aggr, x1_n1_aggr, x1_n2_aggr, x1_n3_aggr;
+wire signed [AGGR_OUT1_SIZE - 1:0] x2_n0_aggr, x2_n1_aggr, x2_n2_aggr, x2_n3_aggr;
+wire signed [AGGR_OUT1_SIZE - 1:0] x3_n0_aggr, x3_n1_aggr, x3_n2_aggr, x3_n3_aggr;
 
 // Wires for first DNN layer (dnn_layer_1 -> aggr)
 
@@ -42,10 +43,10 @@ wire signed [WEIGHTED_OUT_SIZE-1:0] y4_n3, y5_n3, y6_n3, y7_n3;
 wire mac_ready_n0, mac_ready_n1, mac_ready_n2, mac_ready_n3;
 
 // Wires for second aggregation (aggr -> relu)
-wire signed [OUTPUT_SIZE-1:0] y4_n0_aggr, y4_n1_aggr, y4_n2_aggr, y4_n3_aggr;
-wire signed [OUTPUT_SIZE-1:0] y5_n0_aggr, y5_n1_aggr, y5_n2_aggr, y5_n3_aggr;
-wire signed [OUTPUT_SIZE-1:0] y6_n0_aggr, y6_n1_aggr, y6_n2_aggr, y6_n3_aggr;
-wire signed [OUTPUT_SIZE-1:0] y7_n0_aggr, y7_n1_aggr, y7_n2_aggr, y7_n3_aggr;
+wire signed [AGGR_OUT2_SIZE-1:0] y4_n0_aggr, y4_n1_aggr, y4_n2_aggr, y4_n3_aggr;
+wire signed [AGGR_OUT2_SIZE-1:0] y5_n0_aggr, y5_n1_aggr, y5_n2_aggr, y5_n3_aggr;
+wire signed [AGGR_OUT2_SIZE-1:0] y6_n0_aggr, y6_n1_aggr, y6_n2_aggr, y6_n3_aggr;
+wire signed [AGGR_OUT2_SIZE-1:0] y7_n0_aggr, y7_n1_aggr, y7_n2_aggr, y7_n3_aggr;
 wire aggr_ready_2;
 
 // Wires for RELU outputs
@@ -62,7 +63,7 @@ wire relu_ready;
 
 
 // First Aggregation Stage
-aggregation #(.AGGR_IN_SIZE(AGGR_IN_SIZE), .AGGR_OUT_SIZE(AGGR_OUT_SIZE)) 
+aggregation #(.AGGR_IN_SIZE(AGGR_IN_SIZE), .AGGR_OUT_SIZE(AGGR_OUT1_SIZE)) 
     aggr_inst1 (
         .clk(clk), 
         .in_ready_aggr(in_ready),
@@ -77,7 +78,7 @@ aggregation #(.AGGR_IN_SIZE(AGGR_IN_SIZE), .AGGR_OUT_SIZE(AGGR_OUT_SIZE))
         .out_ready_aggr(aggr_ready_1)
     );
 
-dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
+dnn_layer1 #(.IN_SIZE(AGGR_OUT1_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
     dnn_node0 (
         .clk(clk), 
         .in_ready(aggr_ready_1),
@@ -90,7 +91,7 @@ dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE))
         .mac_ready(mac_ready_n0)
     );
 
-dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
+dnn_layer1 #(.IN_SIZE(AGGR_OUT1_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
     dnn_node1 (
         .clk(clk), 
         .in_ready(aggr_ready_1),
@@ -103,7 +104,7 @@ dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE))
         .mac_ready(mac_ready_n1)
     );
 
-dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
+dnn_layer1 #(.IN_SIZE(AGGR_OUT1_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
     dnn_node2 (
         .clk(clk), 
         .in_ready(aggr_ready_1),
@@ -116,7 +117,7 @@ dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE))
         .mac_ready(mac_ready_n2)
     );
 
-dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
+dnn_layer1 #(.IN_SIZE(AGGR_OUT1_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE)) 
     dnn_node3 (
         .clk(clk), 
         .in_ready(aggr_ready_1),
@@ -130,8 +131,8 @@ dnn_layer1 #(.IN_SIZE(AGGR_OUT_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE))
     );
 
 // Second Aggregation Stage
-aggregation #(.AGGR_IN_SIZE(WEIGHTED_OUT_SIZE), .AGGR_OUT_SIZE(OUTPUT_SIZE)) 
-    aggr_inst1 (
+aggregation #(.AGGR_IN_SIZE(WEIGHTED_OUT_SIZE), .AGGR_OUT_SIZE(AGGR_OUT2_SIZE)) 
+    aggr_inst2 (
         .clk(clk), 
         .in_ready_aggr(mac_ready_n0 & mac_ready_n1 & mac_ready_n2 & mac_ready_n3),
         .x0_n0(y4_n0), .x1_n0(y5_n0), .x2_n0(y6_n0), .x3_n0(y7_n0),
@@ -146,7 +147,7 @@ aggregation #(.AGGR_IN_SIZE(WEIGHTED_OUT_SIZE), .AGGR_OUT_SIZE(OUTPUT_SIZE))
     );
 
 
-relu_4n #(.RELU4_SIZE(OUTPUT_SIZE)) 
+relu_4n #(.RELU4_SIZE(AGGR_OUT2_SIZE)) 
     relu_inst (
         .clk(clk), 
         .in_ready(aggr_ready_2),
@@ -161,7 +162,7 @@ relu_4n #(.RELU4_SIZE(OUTPUT_SIZE))
         .relu_ready(relu_ready)
     );
 
-dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node0 (
         .clk(clk), 
         .in_ready(relu_ready),
@@ -172,7 +173,7 @@ dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE))
         .mac_ready0(out10_ready_node0), .mac_ready1(out11_ready_node0) 
     );
 
-dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node1 (
         .clk(clk), 
         .in_ready(relu_ready),
@@ -183,7 +184,7 @@ dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE))
         .mac_ready0(out10_ready_node1), .mac_ready1(out11_ready_node1) 
     );
 
-dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node2 (
         .clk(clk), 
         .in_ready(relu_ready),
@@ -194,7 +195,7 @@ dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE))
         .mac_ready0(out10_ready_node2), .mac_ready1(out11_ready_node2) 
     );
 
-dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node3 (
         .clk(clk), 
         .in_ready(relu_ready),

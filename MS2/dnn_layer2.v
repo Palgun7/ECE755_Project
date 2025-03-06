@@ -4,8 +4,8 @@ module dnn_layer2 #(
 )(
     input clk, in_ready,
     input signed [IN_SIZE-1:0] x0, x1, x2, x3,   // Inputs
-    input signed [IN_SIZE-1:0] w48, w58, w68, w78, 
-    input signed [IN_SIZE-1:0] w49, w59, w69, w79,
+    input signed [4:0] w48, w58, w68, w78, 
+    input signed [4:0] w49, w59, w69, w79,
     output signed [OUT_SIZE-1:0] output0, output1,   
     output reg mac_ready0, mac_ready1
 );

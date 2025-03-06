@@ -4,10 +4,10 @@ module dnn_layer1 #(
 )(
     input clk, in_ready,
     input signed [IN_SIZE-1:0] x0, x1, x2, x3,   // Inputs
-    input signed [IN_SIZE-1:0] w04, w05, w06, w07, // Weights for in0
-    input signed [IN_SIZE-1:0] w14, w15, w16, w17, // Weights for in1
-    input signed [IN_SIZE-1:0] w24, w25, w26, w27, // Weights for in2
-    input signed [IN_SIZE-1:0] w34, w35, w36, w37, // Weights for in3
+    input signed [4:0] w04, w05, w06, w07, // Weights for in0
+    input signed [4:0] w14, w15, w16, w17, // Weights for in1
+    input signed [4:0] w24, w25, w26, w27, // Weights for in2
+    input signed [4:0] w34, w35, w36, w37, // Weights for in3
     output signed [OUT_SIZE-1:0] out4, out5, out6, out7,    // Outputs before ReLU
     output reg mac_ready
 );
