@@ -51,10 +51,10 @@ wire signed [AGGR_OUT2_SIZE-1:0] y7_n0_aggr, y7_n1_aggr, y7_n2_aggr, y7_n3_aggr;
 wire aggr_ready_2;
 
 // Wires for RELU outputs
-wire signed [AGGR_OUT2_SIZE-1:0] y4_n0_relu, y4_n1_relu, y4_n2_relu, y4_n3_relu;
-wire signed [AGGR_OUT2_SIZE-1:0] y5_n0_relu, y5_n1_relu, y5_n2_relu, y5_n3_relu;
-wire signed [AGGR_OUT2_SIZE-1:0] y6_n0_relu, y6_n1_relu, y6_n2_relu, y6_n3_relu;
-wire signed [AGGR_OUT2_SIZE-1:0] y7_n0_relu, y7_n1_relu, y7_n2_relu, y7_n3_relu;
+wire signed [WEIGHTED_OUT_SIZE-1:0] y4_n0_relu, y4_n1_relu, y4_n2_relu, y4_n3_relu;
+wire signed [WEIGHTED_OUT_SIZE-1:0] y5_n0_relu, y5_n1_relu, y5_n2_relu, y5_n3_relu;
+wire signed [WEIGHTED_OUT_SIZE-1:0] y6_n0_relu, y6_n1_relu, y6_n2_relu, y6_n3_relu;
+wire signed [WEIGHTED_OUT_SIZE-1:0] y7_n0_relu, y7_n1_relu, y7_n2_relu, y7_n3_relu;
 wire relu_ready;
 
 
@@ -131,15 +131,31 @@ dnn_layer1 #(.IN_SIZE(AGGR_OUT1_SIZE), .OUT_SIZE(WEIGHTED_OUT_SIZE))
         .mac_ready(mac_ready_n3)
     );
 
+
+relu_4n #(.RELU4_SIZE(WEIGHTED_OUT_SIZE)) 
+    relu_inst (
+        .clk(clk), 
+        .in_ready(mac_ready_n0 & mac_ready_n1 & mac_ready_n2 & mac_ready_n3),
+        .in0_n0(y4_n0), .in1_n0(y5_n0), .in2_n0(y6_n0), .in3_n0(y7_n0),
+        .in0_n1(y4_n1), .in1_n1(y5_n1), .in2_n1(y6_n1), .in3_n1(y7_n1),
+        .in0_n2(y4_n2), .in1_n2(y5_n2), .in2_n2(y6_n2), .in3_n2(y7_n2),
+        .in0_n3(y4_n3), .in1_n3(y5_n3), .in2_n3(y6_n3), .in3_n3(y7_n3),
+        .out0_n0(y4_n0_relu), .out1_n0(y5_n0_relu), .out2_n0(y6_n0_relu), .out3_n0(y7_n0_relu),
+        .out0_n1(y4_n1_relu), .out1_n1(y5_n1_relu), .out2_n1(y6_n1_relu), .out3_n1(y7_n1_relu),
+        .out0_n2(y4_n2_relu), .out1_n2(y5_n2_relu), .out2_n2(y6_n2_relu), .out3_n2(y7_n2_relu),
+        .out0_n3(y4_n3_relu), .out1_n3(y5_n3_relu), .out2_n3(y6_n3_relu), .out3_n3(y7_n3_relu),
+        .relu_ready(relu_ready)
+    );
+
 // Second Aggregation Stage
 aggregation #(.AGGR_IN_SIZE(WEIGHTED_OUT_SIZE), .AGGR_OUT_SIZE(AGGR_OUT2_SIZE)) 
     aggr_inst2 (
         .clk(clk), 
-        .in_ready_aggr(mac_ready_n0 & mac_ready_n1 & mac_ready_n2 & mac_ready_n3),
-        .x0_n0(y4_n0), .x1_n0(y5_n0), .x2_n0(y6_n0), .x3_n0(y7_n0),
-        .x0_n1(y4_n1), .x1_n1(y5_n1), .x2_n1(y6_n1), .x3_n1(y7_n1),
-        .x0_n2(y4_n2), .x1_n2(y5_n2), .x2_n2(y6_n2), .x3_n2(y7_n2),
-        .x0_n3(y4_n3), .x1_n3(y5_n3), .x2_n3(y6_n3), .x3_n3(y7_n3),
+        .in_ready_aggr(relu_ready),
+        .x0_n0(y4_n0_relu), .x1_n0(y5_n0_relu), .x2_n0(y6_n0_relu), .x3_n0(y7_n0_relu),
+        .x0_n1(y4_n1_relu), .x1_n1(y5_n1_relu), .x2_n1(y6_n1_relu), .x3_n1(y7_n1_relu),
+        .x0_n2(y4_n2_relu), .x1_n2(y5_n2_relu), .x2_n2(y6_n2_relu), .x3_n2(y7_n2_relu),
+        .x0_n3(y4_n3_relu), .x1_n3(y5_n3_relu), .x2_n3(y6_n3_relu), .x3_n3(y7_n3_relu),
         .x0_n0_aggr(y4_n0_aggr), .x0_n1_aggr(y4_n1_aggr), .x0_n2_aggr(y4_n2_aggr), .x0_n3_aggr(y4_n3_aggr),
         .x1_n0_aggr(y5_n0_aggr), .x1_n1_aggr(y5_n1_aggr), .x1_n2_aggr(y5_n2_aggr), .x1_n3_aggr(y5_n3_aggr),
         .x2_n0_aggr(y6_n0_aggr), .x2_n1_aggr(y6_n1_aggr), .x2_n2_aggr(y6_n2_aggr), .x2_n3_aggr(y6_n3_aggr),
@@ -148,26 +164,13 @@ aggregation #(.AGGR_IN_SIZE(WEIGHTED_OUT_SIZE), .AGGR_OUT_SIZE(AGGR_OUT2_SIZE))
     );
 
 
-relu_4n #(.RELU4_SIZE(AGGR_OUT2_SIZE)) 
-    relu_inst (
-        .clk(clk), 
-        .in_ready(aggr_ready_2),
-        .in0_n0(y4_n0_aggr), .in1_n0(y5_n0_aggr), .in2_n0(y6_n0_aggr), .in3_n0(y7_n0_aggr),
-        .in0_n1(y4_n1_aggr), .in1_n1(y5_n1_aggr), .in2_n1(y6_n1_aggr), .in3_n1(y7_n1_aggr),
-        .in0_n2(y4_n2_aggr), .in1_n2(y5_n2_aggr), .in2_n2(y6_n2_aggr), .in3_n2(y7_n2_aggr),
-        .in0_n3(y4_n3_aggr), .in1_n3(y5_n3_aggr), .in2_n3(y6_n3_aggr), .in3_n3(y7_n3_aggr),
-        .out0_n0(y4_n0_relu), .out1_n0(y5_n0_relu), .out2_n0(y6_n0_relu), .out3_n0(y7_n0_relu),
-        .out0_n1(y4_n1_relu), .out1_n1(y5_n1_relu), .out2_n1(y6_n1_relu), .out3_n1(y7_n1_relu),
-        .out0_n2(y4_n2_relu), .out1_n2(y5_n2_relu), .out2_n2(y6_n2_relu), .out3_n2(y7_n2_relu),
-        .out0_n3(y4_n3_relu), .out1_n3(y5_n3_relu), .out2_n3(y6_n3_relu), .out3_n3(y7_n3_relu),
-        .relu_ready(relu_ready)
-    );
+
 
 dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node0 (
         .clk(clk), 
-        .in_ready(relu_ready),
-        .x0(y4_n0_relu), .x1(y5_n0_relu), .x2(y6_n0_relu), .x3(y7_n0_relu),
+        .in_ready(aggr_ready_2),
+        .x0(y4_n0_aggr), .x1(y5_n0_aggr), .x2(y6_n0_aggr), .x3(y7_n0_aggr),
         .w48(w48), .w58(w58), .w68(w68), .w78(w78),
         .w49(w49), .w59(w59), .w69(w69), .w79(w79),
         .output0(out0_node0), .output1(out1_node0),
@@ -177,8 +180,8 @@ dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE))
 dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node1 (
         .clk(clk), 
-        .in_ready(relu_ready),
-        .x0(y4_n1_relu), .x1(y5_n1_relu), .x2(y6_n1_relu), .x3(y7_n1_relu),
+        .in_ready(aggr_ready_2),
+        .x0(y4_n1_aggr), .x1(y5_n1_aggr), .x2(y6_n1_aggr), .x3(y7_n1_aggr),
         .w48(w48), .w58(w58), .w68(w68), .w78(w78),
         .w49(w49), .w59(w59), .w69(w69), .w79(w79),
         .output0(out0_node1), .output1(out1_node1),
@@ -188,8 +191,8 @@ dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE))
 dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node2 (
         .clk(clk), 
-        .in_ready(relu_ready),
-        .x0(y4_n2_relu), .x1(y5_n2_relu), .x2(y6_n2_relu), .x3(y7_n2_relu),
+        .in_ready(aggr_ready_2),
+        .x0(y4_n2_aggr), .x1(y5_n2_aggr), .x2(y6_n2_aggr), .x3(y7_n2_aggr),
         .w48(w48), .w58(w58), .w68(w68), .w78(w78),
         .w49(w49), .w59(w59), .w69(w69), .w79(w79),
         .output0(out0_node2), .output1(out1_node2),
@@ -199,8 +202,8 @@ dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE))
 dnn_layer2 #(.IN_SIZE(AGGR_OUT2_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
     layer2_node3 (
         .clk(clk), 
-        .in_ready(relu_ready),
-        .x0(y4_n3_relu), .x1(y5_n3_relu), .x2(y6_n3_relu), .x3(y7_n3_relu),
+        .in_ready(aggr_ready_2),
+        .x0(y4_n3_aggr), .x1(y5_n3_aggr), .x2(y6_n3_aggr), .x3(y7_n3_aggr),
         .w48(w48), .w58(w58), .w68(w68), .w78(w78),
         .w49(w49), .w59(w59), .w69(w69), .w79(w79),
         .output0(out0_node3), .output1(out1_node3),
