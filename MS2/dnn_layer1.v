@@ -13,7 +13,7 @@ module dnn_layer1 #(
 );
 
     // Multiply and Accumulate (MAC) operations
-    reg signed [OUT_SIZE-1:0] mac_out0, mac_out1;
+    reg signed [OUT_SIZE-1:0] mac_out4, mac_out5, mac_out6, mac_out7;
     
     always @(posedge clk) begin
         if (in_ready) begin
