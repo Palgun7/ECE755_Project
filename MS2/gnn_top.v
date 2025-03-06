@@ -161,6 +161,53 @@ relu_4n #(.RELU4_SIZE(OUTPUT_SIZE))
         .relu_ready(relu_ready)
     );
 
+dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+    layer2_node0 (
+        .clk(clk), 
+        .in_ready(relu_ready),
+        .x0(y4_n0_relu), .x1(y5_n0_relu), .x2(y6_n0_relu), .x3(y7_n0_relu),
+        .w48(w48), .w58(w58), .w68(w68), .w78(w78),
+        .w49(w49), .w59(w59), .w69(w69), .w79(w79),
+        .output0(out0_node0), .output1(out1_node0),
+        .mac_ready0(out10_ready_node0), .mac_ready1(out11_ready_node0) 
+    );
+
+dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+    layer2_node1 (
+        .clk(clk), 
+        .in_ready(relu_ready),
+        .x0(y4_n1_relu), .x1(y5_n1_relu), .x2(y6_n1_relu), .x3(y7_n1_relu),
+        .w48(w48), .w58(w58), .w68(w68), .w78(w78),
+        .w49(w49), .w59(w59), .w69(w69), .w79(w79),
+        .output0(out0_node1), .output1(out1_node1),
+        .mac_ready0(out10_ready_node1), .mac_ready1(out11_ready_node1) 
+    );
+
+dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+    layer2_node2 (
+        .clk(clk), 
+        .in_ready(relu_ready),
+        .x0(y4_n2_relu), .x1(y5_n2_relu), .x2(y6_n2_relu), .x3(y7_n2_relu),
+        .w48(w48), .w58(w58), .w68(w68), .w78(w78),
+        .w49(w49), .w59(w59), .w69(w69), .w79(w79),
+        .output0(out0_node2), .output1(out1_node2),
+        .mac_ready0(out10_ready_node2), .mac_ready1(out11_ready_node2) 
+    );
+
+dnn_layer2 #(.IN_SIZE(OUTPUT_SIZE), .OUT_SIZE(OUTPUT_SIZE)) 
+    layer2_node3 (
+        .clk(clk), 
+        .in_ready(relu_ready),
+        .x0(y4_n3_relu), .x1(y5_n3_relu), .x2(y6_n3_relu), .x3(y7_n3_relu),
+        .w48(w48), .w58(w58), .w68(w68), .w78(w78),
+        .w49(w49), .w59(w59), .w69(w69), .w79(w79),
+        .output0(out0_node3), .output1(out1_node3),
+        .mac_ready0(out10_ready_node3), .mac_ready1(out11_ready_node3) 
+    );
+
+
+
+
 
 
 
