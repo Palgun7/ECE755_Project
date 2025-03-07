@@ -11,10 +11,10 @@ module relu #(parameter RELU_SIZE = 21)
 	always @(posedge clk) begin         
         if(in_ready) begin
             //If negative number then assign as 0 else assign y
-            out0 <= (in0 [4]) ? 'b0 : in0;
-            out1 <= (in1 [4]) ? 'b0 : in1;
-            out2 <= (in2 [4]) ? 'b0 : in2;
-            out3 <= (in3 [4]) ? 'b0 : in3;
+            out0 <= (in0 [RELU_SIZE -1]) ? 'b0 : in0;
+            out1 <= (in1 [RELU_SIZE -1]) ? 'b0 : in1;
+            out2 <= (in2 [RELU_SIZE -1]) ? 'b0 : in2;
+            out3 <= (in3 [RELU_SIZE -1]) ? 'b0 : in3;
         end
         relu_ready <= in_ready;
     end
