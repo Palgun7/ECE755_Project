@@ -1,4 +1,4 @@
-module top (
+  module top (
     x0, x1, x2, x3, 
     w04, w05, w06, w07, 
     w14, w15, w16, w17, 
